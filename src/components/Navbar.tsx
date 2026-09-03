@@ -7,6 +7,13 @@ import type { NavLink } from "@/lib/types";
 interface NavbarProps {
   companyName: string;
   logoUrl: string | null;
+  logoEscuroUrl: string | null;
+  /**
+   * O que fica ATRAS da barra no topo e escuro? Verdadeiro com o Hero
+   * `tipografica` (`bg-primary`), falso com o `retrato` (`bg-paper`). Sem
+   * isso a barra herda as cores de um fundo que pode nao existir.
+   */
+  topoEscuro: boolean;
   /** so as ancoras de secoes que realmente renderizaram. */
   links: NavLink[];
 }
@@ -15,7 +22,13 @@ interface NavbarProps {
  * Navbar fixa para um hero claro: transparente no topo, ganha fundo de papel
  * com blur ao rolar. O texto e sempre escuro. Inclui menu mobile animado.
  */
-export default function Navbar({ companyName, logoUrl, links }: NavbarProps) {
+export default function Navbar({
+  companyName,
+  logoUrl,
+  logoEscuroUrl,
+  topoEscuro,
+  links,
+}: NavbarProps) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -36,6 +49,16 @@ export default function Navbar({ companyName, logoUrl, links }: NavbarProps) {
 
   const solid = scrolled || open;
 
+  // A barra so e escura por tras enquanto esta transparente sobre um topo
+  // escuro. Assim que ganha `bg-paper`, o fundo dela e claro — e foi ai que o
+  // logo branco sumia.
+  const sobreFundoEscuro = !solid && topoEscuro;
+
+  // Logo da vez: claro sobre escuro, escuro sobre claro. Sem a variante certa,
+  // texto — nunca a variante errada.
+  const logoDaVez = sobreFundoEscuro ? logoUrl : logoEscuroUrl;
+  const barra = sobreFundoEscuro ? "bg-on-primary" : "bg-ink";
+
   return (
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${
@@ -51,15 +74,19 @@ export default function Navbar({ companyName, logoUrl, links }: NavbarProps) {
           className="flex items-center gap-2.5"
           aria-label={`${companyName} — ir para o topo`}
         >
-          {logoUrl ? (
+          {logoDaVez ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
-              src={logoUrl}
+              src={logoDaVez}
               alt={companyName}
               className="h-9 w-auto object-contain"
             />
           ) : (
-            <span className="font-display text-xl font-semibold tracking-tight text-ink">
+            <span
+              className={`font-display text-xl font-semibold tracking-tight ${
+                sobreFundoEscuro ? "text-on-primary" : "text-ink"
+              }`}
+            >
               {companyName}
             </span>
           )}
@@ -71,7 +98,11 @@ export default function Navbar({ companyName, logoUrl, links }: NavbarProps) {
             <a
               key={link.href}
               href={link.href}
-              className="group relative text-sm text-ink-soft transition-colors hover:text-ink"
+              className={`group relative text-sm transition-colors ${
+                sobreFundoEscuro
+                  ? "text-on-primary/75 hover:text-on-primary"
+                  : "text-ink-soft hover:text-ink"
+              }`}
             >
               {link.label}
               <span className="absolute -bottom-1.5 left-0 h-px w-0 bg-secondary transition-all duration-300 group-hover:w-full" />
@@ -79,7 +110,11 @@ export default function Navbar({ companyName, logoUrl, links }: NavbarProps) {
           ))}
           <a
             href="#contato"
-            className="bg-primary px-6 py-3 text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-on-primary transition-colors hover:bg-primary-strong"
+            className={`px-6 py-3 text-[0.72rem] font-semibold uppercase tracking-[0.16em] transition-colors ${
+              sobreFundoEscuro
+                ? "bg-on-primary text-primary hover:bg-on-primary/90"
+                : "bg-primary text-on-primary hover:bg-primary-strong"
+            }`}
           >
             Entrar em contato
           </a>
@@ -95,17 +130,17 @@ export default function Navbar({ companyName, logoUrl, links }: NavbarProps) {
         >
           <div className="flex flex-col items-end gap-[5px]">
             <span
-              className={`block h-0.5 rounded-full bg-ink transition-all duration-300 ${
+              className={`block h-0.5 rounded-full transition-all duration-300 ${barra} ${
                 open ? "w-6 translate-y-[7px] rotate-45" : "w-6"
               }`}
             />
             <span
-              className={`block h-0.5 w-4 rounded-full bg-ink transition-all duration-300 ${
+              className={`block h-0.5 w-4 rounded-full transition-all duration-300 ${barra} ${
                 open ? "opacity-0" : "opacity-100"
               }`}
             />
             <span
-              className={`block h-0.5 rounded-full bg-ink transition-all duration-300 ${
+              className={`block h-0.5 rounded-full transition-all duration-300 ${barra} ${
                 open ? "w-6 -translate-y-[7px] -rotate-45" : "w-5"
               }`}
             />

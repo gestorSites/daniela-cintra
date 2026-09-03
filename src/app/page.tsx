@@ -73,6 +73,10 @@ export default async function HomePage() {
       <Navbar
         companyName={meta.companyName}
         logoUrl={meta.logoUrl}
+        logoEscuroUrl={meta.logoEscuroUrl}
+        // A barra fica transparente sobre o Hero; so a variante `tipografica`
+        // tem fundo escuro atras dela.
+        topoEscuro={content.hero.variante === "tipografica"}
         links={navLinks}
       />
       <main>

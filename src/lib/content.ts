@@ -407,6 +407,14 @@ export function buildContent(
     firstImage(images, ["logo", "marca", "logotipo"])?.url ||
     null;
 
+  // Variante escura, para os fundos claros. Sem ela, quem precisa de logo
+  // escuro mostra o nome em texto — melhor um nome legivel que um logo branco
+  // sobre papel branco.
+  const logoEscuroUrl =
+    pick(content, ["meta", "geral"], ["logo_escuro", "logo_dark", "logotipo_escuro"]) ||
+    firstImage(images, ["logo_escuro", "logo-escuro", "logo_dark", "marca_escura"])?.url ||
+    null;
+
   const oabNumero = pick(content, ["meta"], ["oab_numero", "oab", "numero_oab"]) || "";
   const oabSeccional =
     pick(content, ["meta"], ["oab_seccional", "seccional", "oab_uf"]) || "";
@@ -516,6 +524,7 @@ export function buildContent(
       slogan: pick(content, ["meta"], ["slogan", "tagline"]) || "",
       description,
       logoUrl,
+    logoEscuroUrl,
       domain: client?.domain ?? null,
       resolved: Boolean(client?.id),
     },

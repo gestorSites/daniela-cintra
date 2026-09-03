@@ -71,6 +71,12 @@ export interface MetaContent {
    */
   description: string;
   logoUrl: string | null;
+  /**
+   * Variante ESCURA do logo, para fundo claro: a Navbar depois do scroll e a
+   * pagina `/links`. Ausente, esses lugares caem no nome em texto — nunca no
+   * `logoUrl` claro, que sobre fundo claro fica invisivel.
+   */
+  logoEscuroUrl: string | null;
   domain: string | null;
   /** true quando o cliente foi encontrado no Supabase. */
   resolved: boolean;

@@ -15,6 +15,9 @@ const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 /** Pagina de links no estilo "link na bio" (Linktree). */
 export default function LinkTree({ links, meta }: LinkTreeProps) {
   const initial = meta.companyName.charAt(0).toUpperCase();
+  // Em const propria para o TypeScript estreitar `string | null` -> `string`
+  // dentro do ramo; `Boolean(...)` numa variavel separada nao estreita.
+  const logoEscuro = meta.logoEscuroUrl;
 
   return (
     <main className="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden px-5 py-16">
@@ -33,21 +36,35 @@ export default function LinkTree({ links, meta }: LinkTreeProps) {
           transition={{ duration: 0.6, ease: EASE }}
           className="flex flex-col items-center text-center"
         >
-          <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border border-line bg-paper-raised shadow-soft">
-            {meta.logoUrl ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={meta.logoUrl}
-                alt={meta.companyName}
-                className="h-full w-full object-cover"
-              />
-            ) : (
+          {/* O fundo desta pagina e claro, entao aqui vai a variante ESCURA.
+              E o logo por extenso e ~2.3:1: num circulo com `object-cover` ele
+              era recortado no meio da palavra. Sem a variante escura, cai no
+              circulo com a inicial, que continua legivel. */}
+          {logoEscuro ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={logoEscuro}
+              alt={meta.companyName}
+              className="h-16 w-auto max-w-[15rem] object-contain"
+            />
+          ) : (
+            <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border border-line bg-paper-raised shadow-soft">
               <span className="font-display text-4xl font-semibold text-primary">
                 {initial}
               </span>
-            )}
-          </div>
-          <h1 className="mt-5 font-display text-3xl font-semibold tracking-tight text-ink">
+            </div>
+          )}
+          {/* O logo por extenso ja escreve o nome. Quando a headline e apenas
+              o nome (o padrao, sem linha em `links/headline`), o h1 continua
+              no DOM pela semantica e some da tela. Headline propria aparece
+              normalmente — ai nao ha repeticao. */}
+          <h1
+            className={
+              logoEscuro && links.headline === meta.companyName
+                ? "sr-only"
+                : "mt-5 font-display text-3xl font-semibold tracking-tight text-ink"
+            }
+          >
             {links.headline}
           </h1>
           {links.bio && (

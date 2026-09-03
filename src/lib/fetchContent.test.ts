@@ -405,3 +405,46 @@ describe("buildContent — description", () => {
     );
   });
 });
+
+/* ------------------------------------------------------------------ */
+
+describe("buildContent — as duas variantes do logo", () => {
+  function imagem(section: string, url: string): ImageRow {
+    return { client_id: "c1", section, url, alt: "" };
+  }
+
+  it("le cada variante do seu proprio slot de imagem", () => {
+    const meta = buildContent(
+      CLIENT,
+      [],
+      [imagem("logo", "https://ex.com/claro.png"), imagem("logo_escuro", "https://ex.com/escuro.png")],
+    ).meta;
+    expect(meta.logoUrl).toBe("https://ex.com/claro.png");
+    expect(meta.logoEscuroUrl).toBe("https://ex.com/escuro.png");
+  });
+
+  it("aceita a variante escura tambem por key de conteudo", () => {
+    const meta = build([row("meta", "logo_escuro", "https://ex.com/e.svg")]).meta;
+    expect(meta.logoEscuroUrl).toBe("https://ex.com/e.svg");
+  });
+
+  it("NAO cai no logo claro quando a variante escura falta", () => {
+    // O bug que isto trava: o claro sobre fundo claro fica invisivel. Melhor
+    // null — quem consome mostra o nome em texto.
+    const meta = buildContent(CLIENT, [], [imagem("logo", "https://ex.com/claro.png")]).meta;
+    expect(meta.logoUrl).toBe("https://ex.com/claro.png");
+    expect(meta.logoEscuroUrl).toBeNull();
+  });
+
+  it("NAO cai no logo escuro quando o claro falta", () => {
+    const meta = buildContent(CLIENT, [], [imagem("logo_escuro", "https://ex.com/escuro.png")]).meta;
+    expect(meta.logoEscuroUrl).toBe("https://ex.com/escuro.png");
+    expect(meta.logoUrl).toBeNull();
+  });
+
+  it("as duas ausentes ficam nulas, sem uma emprestar da outra", () => {
+    const meta = build([]).meta;
+    expect(meta.logoUrl).toBeNull();
+    expect(meta.logoEscuroUrl).toBeNull();
+  });
+});
