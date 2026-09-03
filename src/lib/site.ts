@@ -29,3 +29,20 @@ export function absoluteUrl(path: string, domain?: string | null): string {
   const base = siteUrl(domain);
   return `${base}${path.startsWith("/") ? path : `/${path}`}`;
 }
+
+/**
+ * O site tem um host canônico de verdade?
+ *
+ * Enquanto `NEXT_PUBLIC_SITE_URL` e `clients.domain` estiverem vazios,
+ * `siteUrl()` cai no `FALLBACK` e o site não tem endereço público — é um
+ * preview. Serve para decidir se o `<meta name="robots">` libera indexação:
+ * um deploy sem domínio ainda ganha uma URL pública (`*.vercel.app`), e
+ * indexá-la publica no Google conteúdo que ainda não foi aprovado.
+ *
+ * Derivado da mesma env que alimenta `canonical` e `og:url` de propósito:
+ * assim não existe um par de pontas para desalinhar, e ligar o domínio é o
+ * mesmo gesto que libera a indexação.
+ */
+export function hasCanonicalHost(domain?: string | null): boolean {
+  return siteUrl(domain) !== FALLBACK;
+}

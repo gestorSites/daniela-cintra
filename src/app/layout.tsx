@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Fraunces, Hanken_Grotesk } from "next/font/google";
 import { fetchContent } from "@/lib/fetchContent";
-import { siteUrl } from "@/lib/site";
+import { hasCanonicalHost, siteUrl } from "@/lib/site";
 import "./globals.css";
 
 const display = Fraunces({
@@ -48,7 +48,10 @@ export async function generateMetadata(): Promise<Metadata> {
       description,
     },
     twitter: { card: "summary_large_image", title: nome, description },
-    robots: { index: true, follow: true },
+    // Sem domínio o site é preview: não indexa. Ver `hasCanonicalHost`.
+    robots: hasCanonicalHost(meta.domain)
+      ? { index: true, follow: true }
+      : { index: false, follow: false },
   };
 }
 
