@@ -8,6 +8,12 @@ import type { MetaContent, NavLink, RodapeContent } from "@/lib/types";
  * pode ser publicado. Razão social, CNPJ, inscrição, endereço e o aviso do
  * Código de Ética vêm juntos — o aviso é constante do template, os demais
  * vêm do banco e somem quando não preenchidos.
+ *
+ * O slogan entra como **assinatura de marca**, sob o nome do escritório e
+ * acima do bloco legal: menor que o nome e em `ink-soft`, o mesmo tom
+ * secundário do bloco legal e da `.eyebrow`. Deliberadamente não é a cor
+ * `secondary` — uma frase inteira em dourado leria como chamada, e o
+ * Provimento 205/2021 é justamente sobre não fazer chamada.
  */
 export default function Footer({
   meta,
@@ -30,12 +36,25 @@ export default function Footer({
     <footer className="border-t border-line bg-paper">
       <div className="container-wide py-16">
         <div className="flex flex-col gap-8 sm:flex-row sm:items-baseline sm:justify-between">
-          <Link
-            href="/"
-            className="font-display text-xl font-normal tracking-tight text-ink"
-          >
-            {meta.companyName}
-          </Link>
+          <div>
+            <Link
+              href="/"
+              className="font-display text-xl font-normal tracking-tight text-ink"
+            >
+              {meta.companyName}
+            </Link>
+
+            {/*
+              Slogan vazio não deixa rastro: a margem mora no próprio <p>, e
+              não há separador entre ele e o nome. Sem a key, o rodapé fica
+              byte a byte como era antes desta mudança.
+            */}
+            {meta.slogan && (
+              <p className="mt-2 max-w-md text-balance text-sm leading-relaxed text-ink-soft">
+                {meta.slogan}
+              </p>
+            )}
+          </div>
 
           <nav className="flex flex-wrap gap-x-7 gap-y-2">
             {links.map((link) => (
