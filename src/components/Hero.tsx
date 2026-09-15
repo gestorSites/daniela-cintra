@@ -47,6 +47,16 @@ export default function Hero({
         id="inicio"
         className="relative overflow-hidden bg-primary text-on-primary"
       >
+        {/* Simbolo da marca como marca d'agua, ancorado a direita — o unico
+            elemento figurativo do Hero tipografico. */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/marca/simbolo-branco.svg"
+          alt=""
+          aria-hidden="true"
+          className="pointer-events-none absolute -right-16 top-1/2 hidden h-[32rem] w-[32rem] -translate-y-1/2 opacity-[0.07] lg:block"
+        />
+
         <div className="container-wide py-36 sm:py-44 lg:py-52">
           <motion.div
             initial={{ opacity: 0, y: 18 }}

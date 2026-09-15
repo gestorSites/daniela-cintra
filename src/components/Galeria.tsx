@@ -17,7 +17,7 @@ export default function Galeria({ galeria, companyName }: GaleriaProps) {
   if (galeria.images.length === 0) return null;
 
   return (
-    <section id="galeria" className="py-24 sm:py-32">
+    <section id="galeria" className="pt-24 pb-8 sm:pt-32 sm:pb-12">
       <AnimatedSection className="container-wide">
         <div className="mx-auto max-w-4xl">
           <Carousel images={galeria.images} label={companyName} />

@@ -93,12 +93,15 @@ export default async function HomePage() {
           <Formacao formacao={content.formacao} comissoes={content.comissoes} />
         )}
         {temPublicacoes && <Publicacoes publicacoes={content.publicacoes} />}
+        {temFaq && <Faq faq={content.faq} />}
         {/* Fotos do escritório como contexto de localização, sem legenda que
-            qualifique o espaço. Fica junto ao contato por isso. */}
+            qualifique o espaço. Fica logo antes do contato por isso — não
+            "junto" apenas em espírito: sem essa ordem, uma seção entre elas
+            (Formação, Publicações ou FAQ) empurra a foto para longe do
+            contato que ela deveria introduzir. */}
         {temGaleria && (
           <Galeria galeria={content.galeria} companyName={meta.companyName} />
         )}
-        {temFaq && <Faq faq={content.faq} />}
         <Contato
           contato={content.contato}
           clientId={meta.clientId}
