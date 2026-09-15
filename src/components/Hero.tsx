@@ -47,14 +47,15 @@ export default function Hero({
         id="inicio"
         className="relative overflow-hidden bg-primary text-on-primary"
       >
-        {/* Simbolo da marca como marca d'agua, ancorado a direita — o unico
-            elemento figurativo do Hero tipografico. */}
+        {/* Simbolo da marca como marca d'agua, grande o bastante pra passar
+            por baixo do texto — o unico elemento figurativo do Hero
+            tipografico. */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/marca/simbolo-branco.svg"
           alt=""
           aria-hidden="true"
-          className="pointer-events-none absolute -right-16 top-1/2 hidden h-[32rem] w-[32rem] -translate-y-1/2 opacity-[0.07] lg:block"
+          className="pointer-events-none absolute right-24 top-1/2 z-0 hidden h-[62rem] w-[62rem] -translate-y-1/2 opacity-[0.09] lg:block"
         />
 
         <div className="container-wide py-36 sm:py-44 lg:py-52">
@@ -62,7 +63,7 @@ export default function Hero({
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: EASE }}
-            className="max-w-4xl"
+            className="relative z-10 max-w-4xl"
           >
             {/* O logo e o unico elemento simbolico da pagina. */}
             {logoUrl ? (
