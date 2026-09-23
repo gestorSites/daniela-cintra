@@ -28,10 +28,18 @@
   --on-secondary: 255 255 255;
 }
 
+/* scroll-padding = altura da Navbar (h-20 / lg:h-24) + 8px de folga. Mudou a
+   altura da barra, muda aqui junto, senao a ancora para com o titulo da
+   secao por baixo dela. */
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 5.5rem;
   -webkit-text-size-adjust: 100%;
+}
+@media (min-width: 1024px) {
+  html {
+    scroll-padding-top: 6.5rem;
+  }
 }
 
 body {

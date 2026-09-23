@@ -30,6 +30,9 @@ interface NavbarProps {
  * `lg` vira hamburguer — com cinco itens, o logo maior e o numero, a linha
  * nao cabe num tablet.
  */
+/** Igual a duracao da animacao de saida do painel mobile, logo abaixo. */
+const FECHAMENTO_MS = 320;
+
 export default function Navbar({
   companyName,
   logoUrl,
@@ -41,6 +44,31 @@ export default function Navbar({
 }: NavbarProps) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+
+  /**
+   * Navegacao por ancora com o painel mobile aberto.
+   *
+   * O link sozinho nao funciona: `html` tem `scroll-behavior: smooth`, e o
+   * painel colapsando (0,32s) muda a altura do documento no meio do scroll —
+   * o navegador cancela e a pagina fica onde estava, so com o hash trocado.
+   * Entao fecha o painel primeiro e so depois rola. Mesmo defeito e mesma
+   * correcao do `template-escola` (91e4835) e do `4handsbe` (03a708b).
+   *
+   * So para ancora da propria pagina: o CTA do WhatsApp segue como link.
+   */
+  const navegar = (event: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (!href.startsWith("#")) return;
+    const alvo = document.querySelector(href);
+    if (!alvo) return; // sem destino na pagina, deixa o link fazer o padrao
+    if (!open) return; // painel fechado (desktop): a ancora funciona sozinha
+    event.preventDefault();
+    setOpen(false);
+    window.setTimeout(() => {
+      const suave = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      alvo.scrollIntoView({ behavior: suave ? "smooth" : "auto", block: "start" });
+      window.history.replaceState(null, "", href);
+    }, FECHAMENTO_MS + 20);
+  };
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -97,7 +125,7 @@ export default function Navbar({
       <nav className="container-wide flex h-20 items-center justify-between gap-10 lg:h-24">
         <a
           href="#inicio"
-          onClick={() => setOpen(false)}
+          onClick={(event) => navegar(event, "#inicio")}
           className="flex shrink-0 items-center gap-2.5"
           aria-label={`${companyName} — ir para o topo`}
         >
@@ -187,7 +215,7 @@ export default function Navbar({
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: FECHAMENTO_MS / 1000, ease: [0.22, 1, 0.36, 1] }}
             className="overflow-hidden border-t border-line bg-paper lg:hidden"
           >
             <div className="container-wide flex flex-col py-4">
@@ -195,7 +223,7 @@ export default function Navbar({
                 <motion.a
                   key={link.href}
                   href={link.href}
-                  onClick={() => setOpen(false)}
+                  onClick={(event) => navegar(event, link.href)}
                   initial={{ opacity: 0, x: -14 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.06 * index + 0.08 }}
