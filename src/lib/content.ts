@@ -167,6 +167,21 @@ function isAffirmative(raw: string | undefined): boolean {
   return AFFIRMATIVE.has(normalize(raw));
 }
 
+/**
+ * O `texto` traz o numero de inscricao `numero`? Compara so os digitos, e o
+ * numero tem que aparecer inteiro — nao como pedaco de um numero maior.
+ *
+ * Decide se o rodape pode omitir a linha da OAB na home (ela ja esta no
+ * hero). Sem numero cadastrado, e sempre falso: na duvida, a linha fica.
+ */
+export function inscricaoNoTexto(texto: string, numero: string): boolean {
+  const alvo = numero.replace(/\D/g, "");
+  if (!alvo) return false;
+  const grupos: string[] =
+    texto.replace(/(\d)[.\s](?=\d)/g, "$1").match(/\d+/g) ?? [];
+  return grupos.includes(alvo);
+}
+
 /** ["a","b","c"] -> "a, b e c". */
 function enumerar(itens: string[]): string {
   if (itens.length === 0) return "";
@@ -473,6 +488,9 @@ export function buildContent(
           pick(content, ["sobre", "about"], ["texto", "text", "paragrafo", "descricao"]),
         );
 
+  const sobreNome =
+    pick(content, ["sobre", "about"], ["nome", "name"]) || companyName;
+
   /* ---- hero: variante, com queda para a composicao tipografica ---- */
 
   const heroImage = firstImage(images, ["hero", "banner", "capa"]);
@@ -550,7 +568,8 @@ export function buildContent(
     },
 
     sobre: {
-      nome: pick(content, ["sobre", "about"], ["nome", "name"]) || companyName,
+      nome: sobreNome,
+      title: pick(content, ["sobre", "about"], ["title", "titulo"]) || sobreNome,
       paragraphs,
       image: firstImage(images, ["perfil", "sobre", "about", "profissional"]),
     },
@@ -576,6 +595,9 @@ export function buildContent(
 
     formacao: {
       title: pick(content, ["formacao"], ["title", "titulo"]) || "Formação",
+      // Prosa, quando a trajetoria nao cabe em "tipo|curso|...". O componente
+      // mostra ou ela ou a lista, nunca as duas.
+      paragraphs: toParagraphs(pick(content, ["formacao"], ["paragrafo", "texto"])),
       items: formacaoItems,
       idiomas: pick(content, ["formacao"], ["idiomas"]) || "",
     },

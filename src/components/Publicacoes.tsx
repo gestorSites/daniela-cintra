@@ -24,7 +24,7 @@ export default function Publicacoes({ publicacoes }: PublicacoesProps) {
       <div className="container-wide">
         <div className="max-w-2xl">
           <p className="eyebrow">Produção</p>
-          <h2 className="mt-6 font-display text-4xl font-normal leading-[1.1] tracking-tightest text-balance sm:text-5xl">
+          <h2 className="titulo-secao">
             {publicacoes.title}
           </h2>
         </div>
@@ -32,7 +32,7 @@ export default function Publicacoes({ publicacoes }: PublicacoesProps) {
         <div className="mt-16 grid gap-16 lg:grid-cols-2 lg:gap-20 [&>*]:min-w-0">
           {artigos.length > 0 && (
             <AnimatedSection>
-              <p className="text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-ink-soft">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-soft">
                 Artigos
               </p>
               <ul className="mt-8 flex flex-col">
@@ -48,13 +48,13 @@ export default function Publicacoes({ publicacoes }: PublicacoesProps) {
                           href={item.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="group inline-flex items-start gap-2 text-[1.05rem] leading-snug text-ink underline decoration-secondary/40 underline-offset-[5px] transition-colors hover:decoration-secondary"
+                          className="group inline-flex items-start gap-2 text-lg leading-snug text-ink underline decoration-secondary/40 underline-offset-[5px] transition-colors hover:decoration-secondary"
                         >
                           {item.titulo}
                           <IconArrowUpRight className="mt-1 h-3.5 w-3.5 shrink-0 text-secondary transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                         </a>
                       ) : (
-                        <p className="text-[1.05rem] leading-snug text-ink">
+                        <p className="text-lg leading-snug text-ink">
                           {item.titulo}
                         </p>
                       )}
@@ -70,7 +70,7 @@ export default function Publicacoes({ publicacoes }: PublicacoesProps) {
 
           {palestras.length > 0 && (
             <AnimatedSection delay={0.12}>
-              <p className="text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-ink-soft">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-soft">
                 Palestras
               </p>
               <ul className="mt-8 flex flex-col">
@@ -81,7 +81,7 @@ export default function Publicacoes({ publicacoes }: PublicacoesProps) {
                       key={`${item.tema}-${index}`}
                       className="border-t border-line py-6 first:border-t-0 first:pt-0"
                     >
-                      <p className="text-[1.05rem] leading-snug text-ink">
+                      <p className="text-lg leading-snug text-ink">
                         {item.tema}
                       </p>
                       {meta && (

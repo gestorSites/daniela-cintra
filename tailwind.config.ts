@@ -38,7 +38,7 @@ const config: Config = {
         sans: ["var(--font-body)", "ui-sans-serif", "system-ui", "sans-serif"],
       },
       maxWidth: {
-        container: "78rem",
+        container: "90rem",
       },
       letterSpacing: {
         tightest: "-0.045em",

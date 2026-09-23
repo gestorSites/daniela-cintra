@@ -7,7 +7,7 @@ import {
   IconPhone,
   IconWhatsapp,
 } from "./Icons";
-import { whatsappLink } from "@/lib/whatsapp";
+import { formatPhoneBR, whatsappLink } from "@/lib/whatsapp";
 import type { ContatoContent } from "@/lib/types";
 
 interface ContatoProps {
@@ -35,7 +35,8 @@ export default function Contato({
     waLink && {
       icon: IconWhatsapp,
       label: "WhatsApp",
-      value: contato.whatsapp,
+      // So a exibicao e formatada; o link usa os digitos.
+      value: formatPhoneBR(contato.whatsapp),
       abaixo: "",
       href: waLink,
       external: true,
@@ -94,10 +95,10 @@ export default function Contato({
   return (
     <section id="contato" className="py-28 sm:py-36">
       <div className="container-wide">
-        <div className="grid gap-16 lg:grid-cols-2 lg:gap-20 [&>*]:min-w-0">
+        <div className="grid gap-16 lg:grid-cols-2 lg:gap-24 [&>*]:min-w-0">
           <AnimatedSection>
             <p className="eyebrow">Contato</p>
-            <h2 className="mt-6 font-display text-4xl font-normal leading-[1.1] tracking-tightest text-balance sm:text-[2.9rem]">
+            <h2 className="titulo-secao">
               {contato.title}
             </h2>
 
@@ -106,9 +107,9 @@ export default function Contato({
                 href={waLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-9 inline-flex items-center gap-3 bg-primary px-7 py-4 text-sm font-semibold uppercase tracking-[0.14em] text-on-primary transition-colors hover:bg-primary-strong"
+                className="mt-10 inline-flex items-center gap-4 bg-primary px-9 py-5 text-[0.95rem] font-semibold uppercase tracking-[0.14em] text-on-primary transition-colors hover:bg-primary-strong sm:text-base"
               >
-                <IconWhatsapp className="h-4 w-4" />
+                <IconWhatsapp className="h-6 w-6" />
                 Chamar no WhatsApp
               </a>
             )}
@@ -118,11 +119,11 @@ export default function Contato({
                 {linhas.map(({ icon: Icon, label, value, abaixo, href, external }) => {
                   const corpo = (
                     <>
-                      <span className="block text-[1.05rem] leading-snug text-ink">
+                      <span className="block text-lg leading-snug text-ink lg:text-[1.1875rem]">
                         {value}
                       </span>
                       {abaixo && (
-                        <span className="mt-1 block text-sm leading-relaxed text-ink-soft">
+                        <span className="mt-1.5 block text-base leading-relaxed text-ink-soft">
                           {abaixo}
                         </span>
                       )}
@@ -131,10 +132,10 @@ export default function Contato({
                   return (
                     <div
                       key={label}
-                      className="grid grid-cols-[auto_1fr] items-start gap-x-4 border-t border-line py-5 first:border-t-0 first:pt-0 sm:grid-cols-[auto_7rem_1fr]"
+                      className="grid grid-cols-[auto_1fr] items-start gap-x-5 border-t border-line py-6 first:border-t-0 first:pt-0 sm:grid-cols-[auto_8.5rem_1fr]"
                     >
-                      <Icon className="mt-1 h-4 w-4 shrink-0 text-secondary" />
-                      <dt className="col-start-2 text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-ink-soft sm:mt-1">
+                      <Icon className="mt-0.5 h-6 w-6 shrink-0 text-secondary" />
+                      <dt className="col-start-2 text-xs font-semibold uppercase tracking-[0.2em] text-ink-soft sm:mt-1.5 sm:text-[0.8125rem]">
                         {label}
                       </dt>
                       <dd className="col-start-2 mt-1.5 min-w-0 sm:col-start-3 sm:mt-0">
@@ -158,7 +159,7 @@ export default function Contato({
             )}
 
             {redes.length > 0 && (
-              <p className="mt-8 flex flex-wrap gap-x-6 gap-y-2 border-t border-line pt-6 text-sm">
+              <p className="mt-8 flex flex-wrap gap-x-8 gap-y-2 border-t border-line pt-7 text-[0.95rem]">
                 {redes.map((rede) => (
                   <a
                     key={rede.label}

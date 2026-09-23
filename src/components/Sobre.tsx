@@ -25,20 +25,20 @@ function BlocoExperiencia({ item }: { item: ExperienciaItem }) {
       <dl className="mt-6 space-y-4">
         {item.campo && (
           <div>
-            <dt className="text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-ink-soft">
+            <dt className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-soft">
               Experiência em
             </dt>
-            <dd className="mt-1 text-[1.05rem] leading-snug text-ink">
+            <dd className="mt-1 text-lg leading-snug text-ink">
               {item.campo}
             </dd>
           </div>
         )}
         {item.aplicacao && (
           <div>
-            <dt className="text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-ink-soft">
+            <dt className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-soft">
               Aplicada a
             </dt>
-            <dd className="mt-1 text-[1.05rem] leading-snug text-ink">
+            <dd className="mt-1 text-lg leading-snug text-ink">
               {item.aplicacao}
             </dd>
           </div>
@@ -57,8 +57,8 @@ export default function Sobre({ sobre, experiencia }: SobreProps) {
         <div
           className={
             sobre.image
-              ? "grid gap-14 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20 [&>*]:min-w-0"
-              : "grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20 [&>*]:min-w-0"
+              ? "grid items-center gap-14 lg:grid-cols-[0.85fr_1.15fr] lg:gap-24 [&>*]:min-w-0"
+              : "grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-24 [&>*]:min-w-0"
           }
         >
           {/* Retrato — só quando existe. Sem moldura vazia de reserva. */}
@@ -81,14 +81,14 @@ export default function Sobre({ sobre, experiencia }: SobreProps) {
 
           <AnimatedSection delay={sobre.image ? 0.12 : 0}>
             <p className="eyebrow">Sobre</p>
-            <h2 className="mt-6 font-display text-4xl font-normal leading-[1.1] tracking-tightest text-balance sm:text-[2.9rem]">
-              {sobre.nome}
+            <h2 className="titulo-secao">
+              {sobre.title}
             </h2>
 
             {temTexto && (
-              <div className="mt-8 max-w-2xl space-y-5 text-[1.05rem] leading-relaxed text-ink-soft">
+              <div className="mt-9 max-w-3xl space-y-6">
                 {sobre.paragraphs.map((paragraph, index) => (
-                  <p key={index} className="text-pretty">
+                  <p key={index} className="texto-corpo">
                     {paragraph}
                   </p>
                 ))}

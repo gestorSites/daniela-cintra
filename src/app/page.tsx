@@ -13,6 +13,7 @@ import Contato from "@/components/Contato";
 import Footer from "@/components/Footer";
 import WhatsappButton from "@/components/WhatsappButton";
 import { fetchContent } from "@/lib/fetchContent";
+import { inscricaoNoTexto } from "@/lib/content";
 
 // Revalida o conteudo vindo do Supabase a cada 60 segundos.
 export const revalidate = 60;
@@ -40,6 +41,7 @@ export default async function HomePage() {
   const temAreas = content.areas.items.length > 0;
   const temAtendimento = content.atendimento.items.length > 0;
   const temFormacao =
+    content.formacao.paragraphs.length > 0 ||
     content.formacao.items.length > 0 ||
     Boolean(content.formacao.idiomas) ||
     content.comissoes.items.length > 0;
@@ -48,6 +50,11 @@ export default async function HomePage() {
     content.publicacoes.palestras.length > 0;
   const temGaleria = content.galeria.images.length > 0;
   const temFaq = content.faq.items.length > 0;
+
+  // A inscricao sai do rodape so aqui, e so quando o hero ja a mostra — a
+  // pedido da cliente, para nao repetir. A /links e a 404 nao tem hero e
+  // mantem a linha: e o que garante a inscricao nelas.
+  const oabNoHero = inscricaoNoTexto(content.hero.eyebrow, meta.oabNumero);
 
   // `nav` limita o menu do topo as ancoras principais — o rodape lista todas.
   const ancoras = [
@@ -78,12 +85,13 @@ export default async function HomePage() {
         // tem fundo escuro atras dela.
         topoEscuro={content.hero.variante === "tipografica"}
         links={navLinks}
+        whatsapp={content.contato.whatsapp}
+        whatsappMessage={content.hero.ctaWhatsappMessage}
       />
       <main>
         <Hero
           hero={content.hero}
           companyName={meta.companyName}
-          logoUrl={meta.logoUrl}
           whatsapp={content.contato.whatsapp}
         />
         <Sobre sobre={content.sobre} experiencia={content.experiencia} />
@@ -113,6 +121,7 @@ export default async function HomePage() {
         rodape={content.rodape}
         endereco={content.contato.endereco}
         links={footerLinks}
+        ocultarOab={oabNoHero}
       />
       <WhatsappButton
         whatsapp={content.contato.whatsapp}

@@ -7,7 +7,12 @@ interface FormacaoProps {
 }
 
 /**
- * Formacao e comissoes, lado a lado.
+ * Formacao e comissoes, lado a lado — ou uma coluna so, quando falta uma das
+ * duas, para nao sobrar meia secao vazia.
+ *
+ * `formacao/paragrafo` (prosa) substitui a lista de formacao quando existe:
+ * ha trajetoria que o cliente escreve como texto corrido, fundindo formacao e
+ * comissoes, e nao cabe em `tipo|curso|instituicao|ano`. Sem ela, a lista.
  *
  * Item de formacao pode chegar sem `instituicao` e sem `ano` — e o estado em
  * que os dados nascem. A linha de detalhe so e montada com os campos que
@@ -19,23 +24,43 @@ function detalhe(...partes: string[]): string {
 }
 
 export default function Formacao({ formacao, comissoes }: FormacaoProps) {
-  const temFormacao = formacao.items.length > 0 || Boolean(formacao.idiomas);
+  const temProsa = formacao.paragraphs.length > 0;
+  const temFormacao =
+    temProsa || formacao.items.length > 0 || Boolean(formacao.idiomas);
   const temComissoes = comissoes.items.length > 0;
 
   if (!temFormacao && !temComissoes) return null;
 
+  const duasColunas = temFormacao && temComissoes;
+
   return (
     <section id="formacao" className="bg-secondary-soft py-28 sm:py-36">
       <div className="container-wide">
-        <div className="grid gap-16 lg:grid-cols-2 lg:gap-20 [&>*]:min-w-0">
+        <div
+          className={
+            duasColunas
+              ? "grid gap-16 lg:grid-cols-2 lg:gap-20 [&>*]:min-w-0"
+              : "max-w-4xl"
+          }
+        >
           {temFormacao && (
             <AnimatedSection>
               <p className="eyebrow">Trajetória</p>
-              <h2 className="mt-6 font-display text-3xl font-normal leading-[1.12] tracking-tightest text-balance sm:text-4xl">
+              <h2 className="titulo-secao">
                 {formacao.title}
               </h2>
 
-              {formacao.items.length > 0 && (
+              {temProsa && (
+                <div className="mt-10 space-y-6">
+                  {formacao.paragraphs.map((paragraph, index) => (
+                    <p key={index} className="texto-corpo">
+                      {paragraph}
+                    </p>
+                  ))}
+                </div>
+              )}
+
+              {!temProsa && formacao.items.length > 0 && (
                 <ul className="mt-10 flex flex-col">
                   {formacao.items.map((item, index) => {
                     const meta = detalhe(item.instituicao, item.ano);
@@ -45,12 +70,12 @@ export default function Formacao({ formacao, comissoes }: FormacaoProps) {
                         className="border-t border-line py-6 first:border-t-0 first:pt-0"
                       >
                         {item.tipo && (
-                          <p className="text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-secondary-strong">
+                          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-secondary-strong">
                             {item.tipo}
                           </p>
                         )}
                         {item.curso && (
-                          <p className="mt-2 text-[1.05rem] leading-snug text-ink">
+                          <p className="mt-2 text-lg leading-snug text-ink">
                             {item.curso}
                           </p>
                         )}
@@ -68,7 +93,7 @@ export default function Formacao({ formacao, comissoes }: FormacaoProps) {
                   <span className="font-semibold uppercase tracking-[0.2em] text-ink-soft">
                     Idiomas
                   </span>
-                  <span className="mt-1.5 block text-[1.05rem] text-ink">
+                  <span className="mt-1.5 block text-lg text-ink">
                     {formacao.idiomas}
                   </span>
                 </p>
@@ -79,7 +104,7 @@ export default function Formacao({ formacao, comissoes }: FormacaoProps) {
           {temComissoes && (
             <AnimatedSection delay={0.12}>
               <p className="eyebrow">Participação</p>
-              <h2 className="mt-6 font-display text-3xl font-normal leading-[1.12] tracking-tightest text-balance sm:text-4xl">
+              <h2 className="titulo-secao">
                 {comissoes.title}
               </h2>
 
@@ -89,7 +114,7 @@ export default function Formacao({ formacao, comissoes }: FormacaoProps) {
                     key={`${item.nome}-${index}`}
                     className="border-t border-line py-5 first:border-t-0 first:pt-0"
                   >
-                    <p className="text-[1.05rem] leading-snug text-ink">
+                    <p className="text-lg leading-snug text-ink">
                       {item.nome}
                     </p>
                     {item.detalhe && (

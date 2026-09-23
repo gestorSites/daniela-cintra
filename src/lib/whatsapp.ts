@@ -17,3 +17,26 @@ export function whatsappLink(raw: string, message?: string): string {
   const query = message ? `?text=${encodeURIComponent(message)}` : "";
   return `https://wa.me/${digits}${query}`;
 }
+
+/**
+ * Numero para exibir: `(DD) 9XXXX-XXXX` (celular) ou `(DD) XXXX-XXXX`
+ * (fixo). Aceita com ou sem DDI 55. Formato que nao reconhece volta como
+ * veio — melhor o numero cru que um numero cortado errado.
+ */
+export function formatPhoneBR(raw: string): string {
+  const texto = raw.trim();
+  let digits = texto.replace(/\D/g, "");
+  if (!digits) return "";
+  // DDI explicito de outro pais: nao e numero brasileiro, nao formatar.
+  if (texto.startsWith("+") && !digits.startsWith("55")) return texto;
+  if ((digits.length === 12 || digits.length === 13) && digits.startsWith("55")) {
+    digits = digits.slice(2);
+  }
+  if (digits.length === 11) {
+    return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7)}`;
+  }
+  if (digits.length === 10) {
+    return `(${digits.slice(0, 2)}) ${digits.slice(2, 6)}-${digits.slice(6)}`;
+  }
+  return texto;
+}

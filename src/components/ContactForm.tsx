@@ -13,7 +13,7 @@ type Status = "idle" | "submitting" | "success" | "error";
 // text-base (16px) no mobile evita o zoom automatico do iOS ao focar o campo;
 // volta a text-sm a partir de sm.
 const inputClass =
-  "w-full border border-line bg-paper px-4 py-3 text-base text-ink outline-none transition focus:border-secondary focus:ring-1 focus:ring-secondary/40 sm:text-sm";
+  "w-full border border-line bg-paper px-5 py-4 text-base text-ink outline-none transition focus:border-secondary focus:ring-1 focus:ring-secondary/40 lg:text-[1.0625rem]";
 
 function Field({
   label,
@@ -26,7 +26,7 @@ function Field({
 }) {
   return (
     <label htmlFor={htmlFor} className="block">
-      <span className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-ink-soft">
+      <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.18em] text-ink-soft sm:text-[0.8125rem]">
         {label}
       </span>
       {children}
@@ -120,7 +120,7 @@ export default function ContactForm({ clientId }: ContactFormProps) {
     <form
       onSubmit={handleSubmit}
       noValidate
-      className="border border-line bg-paper-raised p-7 sm:p-9"
+      className="border border-line bg-paper-raised p-7 sm:p-10 xl:p-12"
     >
       {/* honeypot — escondido de humanos, isca para bots */}
       <input
@@ -131,7 +131,7 @@ export default function ContactForm({ clientId }: ContactFormProps) {
         aria-hidden="true"
         className="hidden"
       />
-      <div className="flex flex-col gap-5">
+      <div className="flex flex-col gap-6">
         <Field label="Nome" htmlFor="name">
           <input
             id="name"
@@ -161,7 +161,7 @@ export default function ContactForm({ clientId }: ContactFormProps) {
             id="message"
             name="message"
             required
-            rows={4}
+            rows={6}
             maxLength={2000}
             placeholder="Descreva brevemente a sua demanda."
             className={`${inputClass} resize-none`}
@@ -178,11 +178,11 @@ export default function ContactForm({ clientId }: ContactFormProps) {
       <button
         type="submit"
         disabled={status === "submitting"}
-        className="group mt-7 inline-flex w-full items-center justify-center gap-2.5 bg-primary px-6 py-4 text-sm font-semibold uppercase tracking-[0.14em] text-on-primary transition-colors hover:bg-primary-strong disabled:cursor-not-allowed disabled:opacity-60"
+        className="group mt-8 inline-flex w-full items-center justify-center gap-3 bg-primary px-6 py-5 text-[0.95rem] font-semibold uppercase tracking-[0.14em] text-on-primary transition-colors hover:bg-primary-strong disabled:cursor-not-allowed disabled:opacity-60"
       >
         {status === "submitting" ? "Enviando..." : "Enviar mensagem"}
         {status !== "submitting" && (
-          <IconArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+          <IconArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
         )}
       </button>
     </form>

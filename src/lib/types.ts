@@ -107,6 +107,8 @@ export interface HeroContent {
 
 export interface SobreContent {
   nome: string;
+  /** `sobre/title` — titulo da secao. Ausente, cai no `nome`. */
+  title: string;
   /** paragrafo_1..3, na ordem, ja sem os vazios. */
   paragraphs: string[];
   /** slot de imagem `perfil`. */
@@ -171,6 +173,11 @@ export interface FormacaoItem {
 
 export interface FormacaoContent {
   title: string;
+  /**
+   * `formacao/paragrafo` — a trajetoria em texto corrido, ja quebrada em
+   * paragrafos. Quando existe, substitui a lista `items` na tela.
+   */
+  paragraphs: string[];
   items: FormacaoItem[];
   idiomas: string;
 }

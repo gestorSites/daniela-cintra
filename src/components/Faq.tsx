@@ -23,10 +23,10 @@ export default function Faq({ faq }: FaqProps) {
   return (
     <section id="faq" className="bg-primary-soft py-28 sm:py-36">
       <div className="container-wide">
-        <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20 [&>*]:min-w-0">
+        <div className="grid gap-12 lg:grid-cols-[0.75fr_1.25fr] lg:gap-24 [&>*]:min-w-0">
           <div className="lg:sticky lg:top-28 lg:self-start">
             <p className="eyebrow">Dúvidas</p>
-            <h2 className="mt-6 font-display text-4xl font-normal leading-[1.1] tracking-tightest text-balance sm:text-[2.9rem]">
+            <h2 className="titulo-secao">
               {faq.title}
             </h2>
           </div>
@@ -43,18 +43,18 @@ export default function Faq({ faq }: FaqProps) {
                     type="button"
                     onClick={() => setOpenIndex(open ? null : index)}
                     aria-expanded={open}
-                    className="flex w-full items-start justify-between gap-6 py-6 text-left"
+                    className="flex w-full items-start justify-between gap-8 py-7 text-left"
                   >
-                    <span className="font-display text-lg font-normal leading-snug text-ink">
+                    <span className="font-display text-xl font-normal leading-snug text-ink lg:text-[1.4rem]">
                       {item.pergunta}
                     </span>
                     <span
-                      className={`mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center text-secondary transition-transform duration-300 ${
+                      className={`mt-1 flex h-7 w-7 shrink-0 items-center justify-center text-secondary transition-transform duration-300 ${
                         open ? "rotate-45" : ""
                       }`}
                       aria-hidden="true"
                     >
-                      <IconPlus className="h-4 w-4" />
+                      <IconPlus className="h-5 w-5" />
                     </span>
                   </button>
                   <AnimatePresence initial={false}>
@@ -66,7 +66,12 @@ export default function Faq({ faq }: FaqProps) {
                         transition={{ duration: 0.34, ease: EASE }}
                         className="overflow-hidden"
                       >
-                        <p className="max-w-xl pb-7 pr-10 text-[0.97rem] leading-relaxed text-ink-soft text-pretty">
+                        {/* Justificado a pedido da cliente. O que segura os
+                            rios: hifenizacao (a pagina e `lang="pt-BR"`),
+                            coluna de ~70 caracteres (`max-w-[42rem]`) e
+                            entrelinha folgada. Coluna mais larga que isso
+                            cansa; mais estreita, abre buraco entre palavras. */}
+                        <p className="max-w-[42rem] pb-8 pr-12 text-justify text-lg leading-[1.75] text-ink-soft hyphens-auto">
                           {item.resposta}
                         </p>
                       </motion.div>

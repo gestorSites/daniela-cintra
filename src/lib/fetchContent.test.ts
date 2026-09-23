@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildContent, collectList, splitFields } from "@/lib/content";
+import { buildContent, collectList, inscricaoNoTexto, splitFields } from "@/lib/content";
 import type { ClientRow, ContentRow, ImageRow } from "@/lib/types";
 
 const CLIENT: ClientRow = {
@@ -142,6 +142,25 @@ describe("buildContent — listas ausentes", () => {
 
 /* ------------------------------------------------------------------ */
 
+describe("buildContent — sobre", () => {
+  it("o título cai no nome quando `sobre/title` está ausente", () => {
+    const content = build([row("sobre", "nome", "Fulana de Tal")]);
+    expect(content.sobre.title).toBe("Fulana de Tal");
+    expect(content.sobre.nome).toBe("Fulana de Tal");
+  });
+
+  it("`sobre/title` substitui o título sem trocar o nome", () => {
+    const content = build([
+      row("sobre", "nome", "Fulana de Tal"),
+      row("sobre", "title", "Sobre a Dra. Fulana"),
+    ]);
+    expect(content.sobre.title).toBe("Sobre a Dra. Fulana");
+    expect(content.sobre.nome).toBe("Fulana de Tal");
+  });
+});
+
+/* ------------------------------------------------------------------ */
+
 describe("buildContent — formacao", () => {
   it("mantém instituicao e ano vazios quando não foram informados", () => {
     const content = build([row("formacao", "item_1", "Graduação|Direito")]);
@@ -151,6 +170,27 @@ describe("buildContent — formacao", () => {
       instituicao: "",
       ano: "",
     });
+  });
+
+  it("sem `paragrafo`, não há prosa e a lista segue valendo", () => {
+    const content = build([row("formacao", "item_1", "Graduação|Direito")]);
+    expect(content.formacao.paragraphs).toEqual([]);
+    expect(content.formacao.items).toHaveLength(1);
+  });
+
+  it("`paragrafo` vira prosa, quebrada por linha em branco", () => {
+    const content = build([
+      row("formacao", "paragrafo", "Graduação em Direito.\n\nParticipação na OAB."),
+    ]);
+    expect(content.formacao.paragraphs).toEqual([
+      "Graduação em Direito.",
+      "Participação na OAB.",
+    ]);
+  });
+
+  it("`paragrafo` só com espaço conta como ausente", () => {
+    const content = build([row("formacao", "paragrafo", "   ")]);
+    expect(content.formacao.paragraphs).toEqual([]);
   });
 
   it("aceita instituição vazia no meio e ano preenchido no fim", () => {
@@ -446,5 +486,27 @@ describe("buildContent — as duas variantes do logo", () => {
     const meta = build([]).meta;
     expect(meta.logoUrl).toBeNull();
     expect(meta.logoEscuroUrl).toBeNull();
+  });
+});
+
+/* ------------------------------------------------------------------ */
+
+describe("inscricaoNoTexto", () => {
+  it("acha o número no eyebrow, com qualquer pontuação", () => {
+    expect(
+      inscricaoNoTexto("ADVOCACIA – DRA. FULANA OAB/SP 123.456", "123456"),
+    ).toBe(true);
+  });
+
+  it("falso quando o texto não traz o número", () => {
+    expect(inscricaoNoTexto("Advogada em Franca/SP", "123456")).toBe(false);
+  });
+
+  it("falso sem número cadastrado — o rodapé nunca perde a linha por isso", () => {
+    expect(inscricaoNoTexto("OAB/SP 123456", "")).toBe(false);
+  });
+
+  it("não casa um número que só aparece como parte de outro maior", () => {
+    expect(inscricaoNoTexto("Protocolo 91234567", "123456")).toBe(false);
   });
 });

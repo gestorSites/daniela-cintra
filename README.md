@@ -57,7 +57,10 @@ Regras de redação da copy (inclusive dos fallbacks deste template):
 - Voz institucional (o escritório, o atendimento) é permitida. Nunca afirmar
   que existem outros advogados — sem seção de equipe, sem "nossa equipe
   jurídica", sem "nossos advogados".
-- O número de inscrição na OAB deve aparecer no rodapé de todas as páginas.
+- O número de inscrição na OAB deve aparecer em todas as páginas. No rodapé
+  ele é o padrão; **só a home o omite**, e só quando o hero já traz o número
+  (`inscricaoNoTexto`, em `src/lib/content.ts`). A `/links` e a 404 não têm
+  hero e sempre mostram a linha.
 - O **aviso do Código de Ética é constante do template**, não key de banco
   (`AVISO`, em `src/lib/content.ts`). É de propósito: o texto que sustenta a
   conformidade da página não pode ser apagado nem reescrito pelo admin. Uma
